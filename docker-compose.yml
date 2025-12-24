@@ -24,5 +24,14 @@ services:
     env_file:
       - .env
 
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # <--- CRITICAL: Prevents host node_modules from overriding container
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Backup polling enforcement
 volumes:
   postgres_data:

@@ -1,0 +1,20 @@
+# Use Node image
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json first (better caching)
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the code
+COPY . .
+
+# Expose the Vite port
+EXPOSE 5173
+
+# Start the dev server
+CMD ["npm", "run", "dev", "--", "--host"]
