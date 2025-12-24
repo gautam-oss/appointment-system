@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import api from './api/axios';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [doctors, setDoctors] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Try to fetch the doctors list we created earlier
+    api.get('doctors/')
+      .then(response => {
+        console.log("Data fetched:", response.data);
+        setDoctors(response.data);
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        setError('Failed to connect to Backend');
+      });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: '20px' }}>
+      <h1>System Status Check</h1>
+      {error && <h3 style={{ color: 'red' }}>{error}</h3>}
+      
+      {!error && (
+        <div>
+          <h3 style={{ color: 'green' }}>Backend Connection: SUCCESS</h3>
+          <p>Doctors found: {doctors.length}</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -33,5 +33,7 @@ services:
       - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true # Backup polling enforcement
+    depends_on:
+      - backend
 volumes:
   postgres_data:
